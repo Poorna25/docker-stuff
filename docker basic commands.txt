@@ -1,0 +1,38 @@
+1)docker container run -t ubuntu top -> to run a container
+2)docker container exec -> to inspect or execute a container
+3)docker container ls -> to see containers and their ids which are running
+4)docker container exec -it b3ad2a23fab3 bash -> to run container using interactive mode with bash
+5)ps -ef -> to inspect containers inside bash
+6)to run multiple containers
+   -> docker container run --detach --publish 8080:80 --name nginx nginx -> to run one container
+   -> http://localhost:8080 -> to run first container it in google chrome
+   -> docker container run --detach --publish 8081:27017 --name mongo mongo:3.4 -> to run second container
+   -> http://localhost:8081 -> to run second container it in google chrome
+7) -> docker container stop [container id] -> to stop the container
+8) -> docker system prune ->remove the stopped containers
+9) -> FROM python:3.6.1-alpine
+RUN pip install flask
+CMD ["python","app.py"]
+COPY app.py /app.py   -> for creating Docker file used in building docker image
+10) -> docker image build -t python-hello-world . -> for building the docker image
+11) -> docker image ls -> for getting image list
+12) -> docker run -p 5001:5000 -d python-hello-world -> to run the docker image
+13) -> http://localhost:5001 -> to see the results of above image which is runned , go to this URL
+14) -> docker container logs [container id] -> to see the logs of the container
+15) -> docker login -> for pushing images into central registry , firstly we have to login to docker hub
+16) -> docker tag [image name] [dockerhub username]/[image name]-> tagging image with your username 
+17) -> docker push [dockerhub username]/[image name] -> pushing image into central registry
+18) -> for deploying a change again rebuild it using step 16 and 17
+19) -> docker image history [image name] -> to watch images history
+20)For using docker swarm in production
+    -> docker swarm init --advertise-addr eth0 -> initializing swarm on node 1(to make it a manager)
+    -> docker node ls -> to see whether nodes are ready or not
+    -> docker service create --detach=true --name [service name] --publish 80:80  --mount source=/etc/hostname,target=/usr/share/nginx/html/index.html,type=bind,ro nginx:1.12
+pgqdxr41dpy8qwkn6qm7vke0q -> to deploy service using service name
+    -> docker service ls -> inspect the services
+    -> docker service ps [service name]
+    -> docker service update --replicas=5 --detach=true [service name] ->updating the services with 5 replicas
+    -> docker service create --detach=true --name [service name] --replicas=5 --publish 81:80  --mount source=/etc/hostname,target=/usr/share/nginx/html/index.html,type=bind,ro nginx:1.12
+aiqdh5n9fyacgvb2g82s412js -> creating new service as above but publishing different port for getting clean output
+    -> watch -n 1 docker service ps [service name] -> used to watch update of output
+    -> docker swarm leave -> to leave swarm cluster 
